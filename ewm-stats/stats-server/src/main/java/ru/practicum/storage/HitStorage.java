@@ -24,4 +24,3 @@ public interface HitStorage extends JpaRepository<Hit, Long> {
             "order by count(distinct h.ip) desc")
     List<StatsDtoResponse> getStatsUniq(LocalDateTime start, LocalDateTime end, List<String> uris);
 }
-;
