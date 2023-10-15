@@ -23,21 +23,21 @@ services:
       - POSTGRES_PASSWORD=pgpassword
       - POSTGRES_DB=stats
 
-  ewm-main:
+  ewm-service:
     build: ewm-main
     image: main-image
-    container_name: ewm-main
+    container_name: ewm-service
     ports:
       - "8080:8080"
     depends_on:
-      - main-db
+      - ewm-db
     environment:
       - CLIENT_URL=http://stats-server:9090
       - SPRING_DATASOURCE_URL=jdbc:postgresql://main-db:5432/main
       - SPRING_DATASOURCE_USERNAME=pguser
       - SPRING_DATASOURCE_PASSWORD=pgpassword
 
-  main-db:
+  ewm-db:
     image: postgres:14-alpine
     container_name: postgres-main-db
     ports:
