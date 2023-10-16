@@ -27,7 +27,7 @@ public class StatsController {
     @PostMapping("/hit")
     @ResponseStatus(code = HttpStatus.CREATED)
     public void createHit(@Valid @RequestBody StatsDtoRequest request) {
-        log.info("Create Hit");
+        log.info("Create Hit for app: {}", request.getApp());
         statsService.createHit(request);
     }
 

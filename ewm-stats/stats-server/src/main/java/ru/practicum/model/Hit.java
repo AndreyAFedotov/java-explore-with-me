@@ -27,16 +27,13 @@ public class Hit {
     @NotNull
     private App app;
 
-    @Column(name = "uri")
-    @NotBlank
+    @Column(name = "uri", length = 4000, nullable = false)
     private String uri;
 
-    @Column(name = "ip")
-    @NotBlank
+    @Column(name = "ip", length = 32, nullable = false)
     private String ip;
 
-    @Column(name = "timestamp")
-    @NotNull
+    @Column(name = "timestamp", nullable = false)
     @PastOrPresent
     private LocalDateTime timestamp;
 }

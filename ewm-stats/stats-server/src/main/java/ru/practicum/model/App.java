@@ -18,7 +18,6 @@ public class App {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name")
-    @NotBlank
+    @Column(name = "name", length = 128, nullable = false)
     private String name;
 }
