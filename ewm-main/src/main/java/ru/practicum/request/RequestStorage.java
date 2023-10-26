@@ -14,7 +14,7 @@ public interface RequestStorage extends JpaRepository<Request, Long> {
             "group by r.event.id")
     List<RequestEvent> getConfirmedRequests(List<Long> ids);
 
-    List<Request> findAllByRequesterId(Long UserId);
+    List<Request> findAllByRequesterId(Long userId);
 
     Boolean existsByRequesterIdAndEventId(Long userId, Long eventId);
 

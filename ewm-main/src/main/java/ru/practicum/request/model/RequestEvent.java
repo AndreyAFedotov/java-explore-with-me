@@ -11,5 +11,5 @@ public class RequestEvent {
 
     private Long eventId;
 
-    private Long Count;
+    private Long count;
 }
