@@ -23,15 +23,15 @@ public class Request {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "requester_id")
+    @JoinColumn(name = "requester_id", nullable = false)
     private User requester;
 
     @ManyToOne
-    @JoinColumn(name = "event_id")
+    @JoinColumn(name = "event_id", nullable = false)
     private Event event;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", length = 50)
+    @Column(name = "status", length = 50, nullable = false)
     private RequestStatus status;
 
     @CreationTimestamp

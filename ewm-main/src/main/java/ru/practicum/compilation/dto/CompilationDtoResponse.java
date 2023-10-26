@@ -15,7 +15,7 @@ public class CompilationDtoResponse {
 
     private List<Long> events;
 
-    private Boolean pined;
+    private Boolean pinned;
 
     private String title;
 }

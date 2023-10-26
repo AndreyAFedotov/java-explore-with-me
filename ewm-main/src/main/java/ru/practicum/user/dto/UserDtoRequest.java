@@ -14,7 +14,7 @@ import javax.validation.constraints.NotBlank;
 public class UserDtoRequest {
 
     @NotBlank
-    @Length(min = 1, max = 300)
+    @Length(min = 2, max = 250)
     private String name;
 
     @NotBlank

@@ -15,5 +15,11 @@ public class StatsDtoResponse {
 
     private String uri;
 
-    private Long hits;
+    private Integer hits;
+
+    public StatsDtoResponse(String app, String uri, Long hits) {
+        this.app = app;
+        this.uri = uri;
+        this.hits = hits.intValue();
+    }
 }

@@ -4,4 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CategoryStorage extends JpaRepository<Category, Long> {
 
+    Boolean existsByNameIgnoreCase(String name);
+
 }

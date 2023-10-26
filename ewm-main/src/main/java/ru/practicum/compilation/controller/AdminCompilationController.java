@@ -6,8 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.compilation.dto.CompilationDtoRequest;
-import ru.practicum.compilation.dto.CompilationDtoResponse;
 import ru.practicum.compilation.dto.CompilationDtoResponseAll;
+import ru.practicum.compilation.dto.CompilationDtoUpdateRequest;
 import ru.practicum.compilation.service.CompilationService;
 
 import javax.validation.Valid;
@@ -35,10 +35,10 @@ public class AdminCompilationController {
         compilationService.deleteCompilationByAdmin(compId);
     }
 
-    @PostMapping("/{compId}")
+    @PatchMapping("/{compId}")
     @ResponseStatus(HttpStatus.OK)
     public CompilationDtoResponseAll updateCompilationByAdmin(@PathVariable Long compId,
-                                                    @Valid @RequestBody CompilationDtoRequest request) {
+                                                              @Valid @RequestBody CompilationDtoUpdateRequest request) {
         log.info("admin:compilations - update compilation with ID: {}", compId);
         return compilationService.updateCompilationByAdmin(compId, request);
     }

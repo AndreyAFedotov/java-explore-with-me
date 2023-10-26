@@ -18,4 +18,6 @@ public interface RequestStorage extends JpaRepository<Request, Long> {
 
     Boolean existsByRequesterIdAndEventId(Long userId, Long eventId);
 
+    List<Request> findAllByEventId(Long eventId);
+
 }

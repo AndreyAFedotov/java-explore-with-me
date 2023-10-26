@@ -12,7 +12,6 @@ import ru.practicum.category.CategoryMapper;
 import ru.practicum.category.CategoryStorage;
 import ru.practicum.category.dto.CategoryDtoRequest;
 import ru.practicum.category.dto.CategoryDtoResponse;
-import ru.practicum.enums.EventState;
 import ru.practicum.event.EventStorage;
 import ru.practicum.exception.exceptions.AccessDeniedException;
 import ru.practicum.exception.exceptions.NotFoundException;
@@ -55,6 +54,10 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryDtoResponse updateCategoryByAdmin(Long id, CategoryDtoRequest request) {
         Category category = categoryStorage.findById(id)
                 .orElseThrow(() -> new NotFoundException("Category with id=" + id + " was not found"));
+
+        if (!category.getName().equals(request.getName()) && categoryStorage.existsByNameIgnoreCase(request.getName())) {
+            throw new AccessDeniedException("Category name duplication for: " + request.getName());
+        }
 
         category.setName(request.getName());
         Category updated = categoryStorage.save(category);

@@ -35,6 +35,7 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public List<RequestDtoResponse> getRequestsByUser(Long userId) {
+        checkUser(userId);
         List<Request> requests = requestStorage.findAllByRequesterId(userId);
         log.info("{} requests was found", requests.size());
 
@@ -89,7 +90,7 @@ public class RequestServiceImpl implements RequestService {
         if (!request.getRequester().getId().equals(userId)) {
             throw new AccessDeniedException("The request ID " + requestId + " belongs to another user");
         }
-        if (request.getStatus() == RequestStatus.CONFIRMED) {
+        if (request.getStatus().equals(RequestStatus.CONFIRMED)) {
             throw new AccessDeniedException("The request ID " + requestId + " is confirmed");
         }
 

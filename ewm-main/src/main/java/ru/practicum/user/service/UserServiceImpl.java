@@ -2,8 +2,8 @@ package ru.practicum.user.service;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.exception.exceptions.NotFoundException;
@@ -12,7 +12,6 @@ import ru.practicum.user.UserMapper;
 import ru.practicum.user.UserStorage;
 import ru.practicum.user.dto.UserDtoRequest;
 import ru.practicum.user.dto.UserDtoResponse;
-import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,7 +27,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDtoResponse> getUsersByAdmin(List<Long> id, int from, int size) {
         Pageable pageable = PageRequest.of(from / size, size);
-        List<User> users = userStorage.getUsersByIdIn(id, pageable).toList();
+        List<User> users;
+        if (id.isEmpty()) {
+            users = userStorage.findAll(pageable).toList();
+        } else {
+            users = userStorage.getUsersByIdIn(id, pageable).toList();
+        }
         log.info("Number of users {}", users.size());
 
         return users.stream()

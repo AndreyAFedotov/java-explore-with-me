@@ -13,6 +13,6 @@ import javax.validation.constraints.NotBlank;
 public class CategoryDtoRequest {
 
     @NotBlank
-    @Length(min = 2, max = 100)
+    @Length(min = 2, max = 50)
     private String name;
 }

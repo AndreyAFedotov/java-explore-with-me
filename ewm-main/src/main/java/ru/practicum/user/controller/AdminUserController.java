@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.exception.exceptions.ValidationException;
 import ru.practicum.user.dto.UserDtoRequest;
 import ru.practicum.user.dto.UserDtoResponse;
 import ru.practicum.user.service.UserService;
@@ -25,15 +24,14 @@ public class AdminUserController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<UserDtoResponse> getUsersByAdmin(@RequestParam(required = false) List<Long> id,
-                                          @RequestParam(defaultValue = "0") int from,
-                                          @RequestParam(defaultValue = "10") int size)
-    throws ValidationException {
-        if (id == null) {
-            id = new ArrayList<>();
+    public List<UserDtoResponse> getUsersByAdmin(@RequestParam(required = false) List<Long> ids,
+                                                 @RequestParam(defaultValue = "0") int from,
+                                                 @RequestParam(defaultValue = "10") int size) {
+        if (ids == null) {
+            ids = new ArrayList<>();
         }
-        log.info("admin:users - request user info. User count: {}", id.size() );
-        return userService.getUsersByAdmin(id, from, size);
+        log.info("admin:users - request user info. User count: {}", ids.size());
+        return userService.getUsersByAdmin(ids, from, size);
     }
 
     @PostMapping

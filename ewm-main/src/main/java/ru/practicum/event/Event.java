@@ -23,30 +23,30 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "annotation", length = 2000)
+    @Column(name = "annotation", length = 2000, nullable = false)
     private String annotation;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @Column(name = "paid")
+    @Column(name = "paid", nullable = false)
     private Boolean paid;
 
-    @Column(name = "event_date")
+    @Column(name = "event_date", nullable = false)
     private LocalDateTime eventDate;
 
     @ManyToOne
-    @JoinColumn(name = "initiator_id")
+    @JoinColumn(name = "initiator_id", nullable = false)
     private User initiator;
 
-    @Column(name = "description", length = 5000)
+    @Column(name = "description", length = 7000, nullable = false)
     private String description;
 
-    @Column(name = "participant_limit")
+    @Column(name = "participant_limit", nullable = false)
     private Integer participantLimit;
 
-    @Column(name = "state", length = 100)
+    @Column(name = "state", length = 64, nullable = false)
     @Enumerated(EnumType.STRING)
     private EventState state;
 
@@ -55,7 +55,7 @@ public class Event {
     private LocalDateTime createdOn;
 
     @ManyToOne
-    @JoinColumn(name = "location_id")
+    @JoinColumn(name = "location_id", nullable = false)
     private Location location;
 
     @Column(name = "request_moderation")
@@ -64,7 +64,7 @@ public class Event {
     @Column(name = "published_on")
     private LocalDateTime publishedOn;
 
-    @Column(name = "title", length = 255)
+    @Column(name = "title", length = 120, nullable = false)
     private String title;
 
 }

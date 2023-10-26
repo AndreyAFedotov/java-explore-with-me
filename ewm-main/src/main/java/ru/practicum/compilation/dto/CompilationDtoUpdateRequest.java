@@ -3,7 +3,6 @@ package ru.practicum.compilation.dto;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
-import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,13 +11,12 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CompilationDtoRequest {
+public class CompilationDtoUpdateRequest {
 
     private final List<Long> events = new ArrayList<>();
 
     private Boolean pinned;
 
-    @NotBlank
     @Length(min = 1, max = 50)
     private String title;
 }

@@ -11,6 +11,7 @@ import ru.practicum.compilation.CompilationMapper;
 import ru.practicum.compilation.CompilationStorage;
 import ru.practicum.compilation.dto.CompilationDtoRequest;
 import ru.practicum.compilation.dto.CompilationDtoResponseAll;
+import ru.practicum.compilation.dto.CompilationDtoUpdateRequest;
 import ru.practicum.event.Event;
 import ru.practicum.event.EventStorage;
 import ru.practicum.event.dto.EventDtoResponseShort;
@@ -32,6 +33,9 @@ public class CompilationServiceImpl implements CompilationService {
 
     @Override
     public CompilationDtoResponseAll createCompilationByAdmin(CompilationDtoRequest request) {
+        if (request.getPinned() == null) {
+            request.setPinned(false);
+        }
         List<Event> events = eventStorage.findAllById(request.getEvents());
         Compilation compilation = compilationStorage.save(CompilationMapper.toCompilation(request, events));
         log.info("Create new compilation with ID: {}", compilation.getId());
@@ -51,11 +55,11 @@ public class CompilationServiceImpl implements CompilationService {
     }
 
     @Override
-    public CompilationDtoResponseAll updateCompilationByAdmin(Long id, CompilationDtoRequest request) {
+    public CompilationDtoResponseAll updateCompilationByAdmin(Long id, CompilationDtoUpdateRequest request) {
         Compilation compilation = compilationStorage.findById(id)
                 .orElseThrow(() -> new NotFoundException("Compilation with id=" + id + " was not found"));
 
-        Optional.ofNullable(request.getPined()).ifPresent(compilation::setPinned);
+        Optional.ofNullable(request.getPinned()).ifPresent(compilation::setPinned);
         Optional.ofNullable(request.getTitle()).ifPresent(compilation::setTitle);
         if (request.getEvents() != null) {
             compilation.setEvents(eventStorage.findAllById(request.getEvents()));

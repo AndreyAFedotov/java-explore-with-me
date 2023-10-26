@@ -1,5 +1,6 @@
 package ru.practicum.event.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import ru.practicum.category.dto.CategoryDtoResponse;
 import ru.practicum.enums.EventState;
@@ -21,10 +22,12 @@ public class EventDtoResponse {
 
     private Integer confirmedRequests;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdOn;
 
     private String description;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime eventDate;
 
     private Long id;
@@ -39,6 +42,7 @@ public class EventDtoResponse {
 
     private Boolean requestModeration;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime publishedOn;
 
     private EventState state;

@@ -34,16 +34,11 @@ public class AdminCategoryController {
         categoryService.deleteCategoryByAdmin(catId);
     }
 
-    @PostMapping("/{catId}")
+    @PatchMapping("/{catId}")
     @ResponseStatus(HttpStatus.OK)
     public CategoryDtoResponse updateCategoryByAdmin(@PathVariable Long catId,
-                                              @Valid @RequestBody CategoryDtoRequest request) {
+                                                     @Valid @RequestBody CategoryDtoRequest request) {
         log.info("admin:categories - update category with ID: {}", catId);
         return categoryService.updateCategoryByAdmin(catId, request);
     }
-
-
-
-
-
 }

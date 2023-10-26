@@ -7,7 +7,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.event.dto.EventDtoRequest;
 import ru.practicum.event.dto.EventDtoResponse;
-import ru.practicum.event.dto.EventDtoUpdateRequest;
+import ru.practicum.event.dto.EventDtoResponseShort;
+import ru.practicum.event.dto.EventDtoUserRequest;
 import ru.practicum.event.service.EventService;
 import ru.practicum.request.dto.RequestDtoResponse;
 import ru.practicum.request.dto.RequestStatusUpdateRequest;
@@ -29,9 +30,9 @@ public class PrivateEventController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<EventDtoResponse> getUserEventsByUser(@PathVariable Long userId,
-                                                      @RequestParam(defaultValue = "0") @PositiveOrZero Integer from,
-                                                      @RequestParam(defaultValue = "10") @Positive Integer size) {
+    public List<EventDtoResponseShort> getUserEventsByUser(@PathVariable Long userId,
+                                                           @RequestParam(defaultValue = "0") @PositiveOrZero Integer from,
+                                                           @RequestParam(defaultValue = "10") @Positive Integer size) {
         log.info("private:events - get events for user ID: {}", userId);
         return eventService.getUserEventsByUser(userId, from, size);
     }
@@ -56,7 +57,7 @@ public class PrivateEventController {
     @ResponseStatus(HttpStatus.OK)
     public EventDtoResponse updateEventByUser(@PathVariable Long userId,
                                               @PathVariable Long eventId,
-                                              @Valid @RequestBody EventDtoUpdateRequest request) {
+                                              @Valid @RequestBody EventDtoUserRequest request) {
         log.info("private:events - update event ID {} by user ID {}", eventId, userId);
         return eventService.updateEventByUser(userId, eventId, request);
     }
@@ -71,9 +72,9 @@ public class PrivateEventController {
 
     @PatchMapping("/{eventId}/requests")
     @ResponseStatus(HttpStatus.OK)
-    public List<RequestStatusUpdateResponse> updateEventRequestsByUser(@PathVariable Long userId,
-                                                                       @PathVariable Long eventId,
-                                                                       @Valid @RequestBody RequestStatusUpdateRequest request) {
+    public RequestStatusUpdateResponse updateEventRequestsByUser(@PathVariable Long userId,
+                                                                 @PathVariable Long eventId,
+                                                                 @Valid @RequestBody RequestStatusUpdateRequest request) {
         log.info("private:events - update requests status for event ID {} by user ID {}", eventId, userId);
         return eventService.updateEventRequestsByUser(userId, eventId, request);
     }

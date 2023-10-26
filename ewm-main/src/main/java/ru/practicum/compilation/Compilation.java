@@ -22,7 +22,7 @@ public class Compilation {
     @Column(name = "pinned")
     private Boolean pinned;
 
-    @Column(name = "title", length = 100)
+    @Column(name = "title", length = 100, nullable = false)
     private String title;
 
     @ManyToMany
