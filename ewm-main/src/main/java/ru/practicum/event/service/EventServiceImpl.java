@@ -103,7 +103,7 @@ public class EventServiceImpl implements EventService {
         }
 
         UpdateStateAction actionReq = request.getStateAction();
-        if(actionReq != null && actionReq.equals(UpdateStateAction.PUBLISH_EVENT)) {
+        if (actionReq != null && actionReq.equals(UpdateStateAction.PUBLISH_EVENT)) {
             if (!event.getState().equals(EventState.PENDING)) {
                 throw new AccessDeniedException("Can publish only PENDING events");
             }
