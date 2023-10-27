@@ -46,12 +46,11 @@ public class CompilationServiceImpl implements CompilationService {
 
     @Override
     public void deleteCompilationByAdmin(Long id) {
-        if (compilationStorage.existsById(id)) {
-            compilationStorage.deleteById(id);
-            log.info("Compilation with ID {} was deleted", id);
-        } else {
+        if (!compilationStorage.existsById(id)) {
             throw new NotFoundException("Compilation with id=" + id + " was not found");
         }
+        compilationStorage.deleteById(id);
+        log.info("Compilation with ID {} was deleted", id);
     }
 
     @Override

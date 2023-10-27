@@ -38,15 +38,14 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void deleteCategoryByAdmin(Long id) {
-        if (isCategoryExists(id)) {
-            if (eventStorage.existsByCategoryId(id)) {
-                throw new AccessDeniedException("The category is not empty");
-            } else {
-                categoryStorage.deleteById(id);
-                log.info(("Category with id={} was deleted"), id);
-            }
-        } else {
+        if (!isCategoryExists(id)) {
             throw new NotFoundException("Category with id=" + id + " was not found");
+        }
+        if (eventStorage.existsByCategoryId(id)) {
+            throw new AccessDeniedException("The category is not empty");
+        } else {
+            categoryStorage.deleteById(id);
+            log.info(("Category with id={} was deleted"), id);
         }
     }
 

@@ -15,5 +15,4 @@ public interface EventStorage extends JpaRepository<Event, Long>, QuerydslPredic
 
     Page<Event> findAllByInitiatorId(Long userId, Pageable pageable);
 
-
 }

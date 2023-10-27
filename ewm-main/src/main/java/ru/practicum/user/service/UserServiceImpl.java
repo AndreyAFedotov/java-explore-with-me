@@ -27,12 +27,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDtoResponse> getUsersByAdmin(List<Long> id, int from, int size) {
         Pageable pageable = PageRequest.of(from / size, size);
-        List<User> users;
-        if (id.isEmpty()) {
-            users = userStorage.findAll(pageable).toList();
-        } else {
-            users = userStorage.getUsersByIdIn(id, pageable).toList();
-        }
+
+        List<User> users = (id.isEmpty()) ?
+                userStorage.findAll(pageable).toList() :
+                userStorage.getUsersByIdIn(id, pageable).toList();
+
         log.info("Number of users {}", users.size());
 
         return users.stream()

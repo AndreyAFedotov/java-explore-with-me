@@ -15,10 +15,7 @@ import ru.practicum.category.Category;
 import ru.practicum.category.CategoryMapper;
 import ru.practicum.category.CategoryStorage;
 import ru.practicum.category.dto.CategoryDtoResponse;
-import ru.practicum.enums.EventState;
-import ru.practicum.enums.RequestStatus;
-import ru.practicum.enums.UpdateEventStatus;
-import ru.practicum.enums.UpdateStateAction;
+import ru.practicum.enums.*;
 import ru.practicum.event.*;
 import ru.practicum.event.dto.*;
 import ru.practicum.exception.exceptions.AccessDeniedException;
@@ -105,19 +102,18 @@ public class EventServiceImpl implements EventService {
             throw new DateException("the time of event must be no earlier than an hour from the publication");
         }
 
-        if (request.getStateAction() != null) {
-            if (request.getStateAction().equals(UpdateStateAction.PUBLISH_EVENT)) {
-                if (!event.getState().equals(EventState.PENDING)) {
-                    throw new AccessDeniedException("Can publish only PENDING events");
-                }
-                event.setState(EventState.PUBLISHED);
-                event.setPublishedOn(now);
-            } else {
-                if (event.getState().equals(EventState.PUBLISHED)) {
-                    throw new AccessDeniedException("Can only reject an unpublished event");
-                }
-                event.setState(EventState.CANCELED);
+        UpdateStateAction actionReq = request.getStateAction();
+        if(actionReq != null && actionReq.equals(UpdateStateAction.PUBLISH_EVENT)) {
+            if (!event.getState().equals(EventState.PENDING)) {
+                throw new AccessDeniedException("Can publish only PENDING events");
             }
+            event.setState(EventState.PUBLISHED);
+            event.setPublishedOn(now);
+        } else if (actionReq != null) {
+            if (event.getState().equals(EventState.PUBLISHED)) {
+                throw new AccessDeniedException("Can only reject an unpublished event");
+            }
+            event.setState(EventState.CANCELED);
         }
 
         Optional.ofNullable(request.getEventDate()).ifPresent(event::setEventDate);
@@ -338,15 +334,15 @@ public class EventServiceImpl implements EventService {
 
         BooleanExpression filter = buildConditionsForEventsPublic(text, categories, paid, start, end, available);
         Sort doSort;
-        if (StringUtils.isNotBlank(sort) && sort.equals("EVENT_DATE")) {
-            doSort = Sort.by("eventDate");
+        if (StringUtils.isNotBlank(sort) && sort.equals(EventSort.EVENT_DATE.toString())) {
+            doSort = Sort.by(EventSort.EVENT_DATE.getTitle());
         } else {
-            doSort = Sort.by("id");
+            doSort = Sort.by(EventSort.ID.getTitle());
         }
         Pageable pageable = PageRequest.of(from / size, size, doSort);
         Page<Event> events = eventStorage.findAll(filter, pageable);
         List<EventDtoResponseShort> result = buildEventDtoResponseShort(events.toList());
-        if (StringUtils.isNotBlank(sort) && sort.equals("VIEWS")) {
+        if (StringUtils.isNotBlank(sort) && sort.equals(EventSort.VIEWS.toString())) {
             Comparator<EventDtoResponseShort> comparator = new EventDtoViewsComparator();
             result.sort(comparator);
         }
