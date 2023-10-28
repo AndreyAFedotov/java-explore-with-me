@@ -27,12 +27,15 @@ public class StatsClient extends BaseClient {
         );
     }
 
-    public ResponseEntity<Object> createHit(HttpServletRequest req) {
+    public ResponseEntity<Object> createHit(HttpServletRequest req, String app) {
         log.info("{} -> POST Hit request", req.getContextPath());
+
+        String realIp = req.getRemoteAddr().equals("0:0:0:0:0:0:0:1") ? "127.0.0.1" : req.getRemoteAddr();
+
         return post("/hit", new StatsDtoRequest(
-                req.getContextPath(),
+                app,
                 req.getRequestURI(),
-                req.getRemoteAddr(),
+                realIp,
                 LocalDateTime.now())
         );
     }
@@ -45,6 +48,6 @@ public class StatsClient extends BaseClient {
                 "unique", uniq
         );
         log.info("GET Stat request");
-        return get("/stats?start={start}&end={end}&uris={uris}&unique={uniq}", parameters);
+        return get("/stats?start={start}&end={end}&uris={uris}&unique={unique}", parameters);
     }
 }
