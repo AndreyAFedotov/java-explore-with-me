@@ -33,4 +33,6 @@ public class EventDtoResponseShort {
 
     private Integer views;
 
+    private Integer comments;
+
 }

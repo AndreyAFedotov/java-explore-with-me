@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 @UtilityClass
 public class EventMapper {
 
-    public static EventDtoResponse toEventDtoResponse(Integer views, Integer requests, Event event) {
+    public static EventDtoResponse toEventDtoResponse(Integer views, Integer requests, Event event, Integer comments) {
         return EventDtoResponse.builder()
                 .annotation(event.getAnnotation())
                 .category(CategoryMapper.toCategoryDtoResponse(event.getCategory()))
@@ -37,6 +37,7 @@ public class EventMapper {
                 .state(event.getState())
                 .title(event.getTitle())
                 .views(views)
+                .comments(comments)
                 .build();
     }
 
@@ -44,7 +45,8 @@ public class EventMapper {
                                                                 Integer requests,
                                                                 CategoryDtoResponse categoryDto,
                                                                 UserDtoResponseShort userDto,
-                                                                Event event) {
+                                                                Event event,
+                                                                Integer comments) {
         return EventDtoResponseShort.builder()
                 .annotation(event.getAnnotation())
                 .category(categoryDto)
@@ -55,6 +57,7 @@ public class EventMapper {
                 .paid(event.getPaid())
                 .title(event.getTitle())
                 .views(view)
+                .comments(comments)
                 .build();
     }
 
