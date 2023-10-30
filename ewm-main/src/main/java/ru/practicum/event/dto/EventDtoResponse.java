@@ -50,4 +50,7 @@ public class EventDtoResponse {
     private String title;
 
     private Integer views;
+
+    private Integer comments;
+
 }

@@ -15,6 +15,7 @@ import ru.practicum.category.Category;
 import ru.practicum.category.CategoryMapper;
 import ru.practicum.category.CategoryStorage;
 import ru.practicum.category.dto.CategoryDtoResponse;
+import ru.practicum.comment.service.CommentService;
 import ru.practicum.enums.*;
 import ru.practicum.event.*;
 import ru.practicum.event.dto.*;
@@ -58,6 +59,7 @@ public class EventServiceImpl implements EventService {
     private final LocationStorage locationStorage;
     private final UserStorage userStorage;
     private final RequestStorage requestStorage;
+    private final CommentService commentService;
 
     @Override
     public List<EventDtoResponse> getEventsByAdmin(List<Long> users, List<EventState> states, List<Long> categories,
@@ -79,12 +81,14 @@ public class EventServiceImpl implements EventService {
 
         Map<Long, Integer> views = statService.getStats(events.toList());
         Map<Long, Integer> requests = requestService.getConfirmedRequests(events.toList());
+        Map<Long, Integer> comments = commentService.getCommentsCountForEvents(events.toList());
         List<EventDtoResponse> result = new ArrayList<>();
         for (Event event : events) {
             EventDtoResponse response = EventMapper.toEventDtoResponse(
                     views.getOrDefault(event.getId(), 0),
                     requests.getOrDefault(event.getId(), 0),
-                    event);
+                    event,
+                    comments.getOrDefault(event.getId(), 0));
             result.add(response);
         }
 
@@ -131,13 +135,15 @@ public class EventServiceImpl implements EventService {
         }
         Map<Long, Integer> views = statService.getStats(List.of(event));
         Map<Long, Integer> requests = requestService.getConfirmedRequests(List.of(event));
+        Map<Long, Integer> comments = commentService.getCommentsCountForEvents(List.of(event));
         Event resultEvent = eventStorage.save(event);
         log.info("Event with ID {} was updated.", resultEvent.getId());
 
         return EventMapper.toEventDtoResponse(
                 views.getOrDefault(event.getId(), 0),
                 requests.getOrDefault(event.getId(), 0),
-                event);
+                event,
+                comments.getOrDefault(event.getId(), 0));
     }
 
     @Override
@@ -178,7 +184,7 @@ public class EventServiceImpl implements EventService {
         ));
 
         log.info("Event with ID {} was created by User {}", result.getId(), result.getInitiator().getId());
-        return EventMapper.toEventDtoResponse(0, 0, result);
+        return EventMapper.toEventDtoResponse(0, 0, result, 0);
     }
 
     @Override
@@ -191,12 +197,14 @@ public class EventServiceImpl implements EventService {
 
         Map<Long, Integer> views = statService.getStats(List.of(event));
         Map<Long, Integer> requests = requestService.getConfirmedRequests(List.of(event));
+        Map<Long, Integer> comments = commentService.getCommentsCountForEvents(List.of(event));
 
         log.info("Event with ID {} founded by user id {}", event.getId(), event.getInitiator().getId());
         return EventMapper.toEventDtoResponse(
                 views.getOrDefault(event.getId(), 0),
                 requests.getOrDefault(event.getId(), 0),
-                event);
+                event,
+                comments.getOrDefault(event.getId(), 0));
     }
 
     @Override
@@ -242,13 +250,15 @@ public class EventServiceImpl implements EventService {
 
         Map<Long, Integer> views = statService.getStats(List.of(event));
         Map<Long, Integer> requests = requestService.getConfirmedRequests(List.of(event));
+        Map<Long, Integer> comments = commentService.getCommentsCountForEvents(List.of(event));
 
         log.info("Event ID {} was update", result.getId());
 
         return EventMapper.toEventDtoResponse(
                 views.getOrDefault(event.getId(), 0),
                 requests.getOrDefault(event.getId(), 0),
-                event);
+                event,
+                comments.getOrDefault(event.getId(), 0));
     }
 
     @Override
@@ -360,11 +370,13 @@ public class EventServiceImpl implements EventService {
 
         Map<Long, Integer> views = statService.getStats(List.of(event));
         Map<Long, Integer> requests = requestService.getConfirmedRequests(List.of(event));
+        Map<Long, Integer> comments = commentService.getCommentsCountForEvents(List.of(event));
 
         return EventMapper.toEventDtoResponse(
                 views.getOrDefault(event.getId(), 0),
                 requests.getOrDefault(event.getId(), 0),
-                event);
+                event,
+                comments.getOrDefault(event.getId(), 0));
     }
 
     @Override
@@ -372,6 +384,7 @@ public class EventServiceImpl implements EventService {
         List<EventDtoResponseShort> result = new ArrayList<>();
         Map<Long, Integer> views = statService.getStats(events);
         Map<Long, Integer> requests = requestService.getConfirmedRequests(events);
+        Map<Long, Integer> comments = commentService.getCommentsCountForEvents(events);
         for (Event event : events) {
             CategoryDtoResponse categoryDto = CategoryMapper.toCategoryDtoResponse(event.getCategory());
             UserDtoResponseShort userDto = UserMapper.toUserDtoResponseShort(event.getInitiator());
@@ -380,7 +393,8 @@ public class EventServiceImpl implements EventService {
                     requests.getOrDefault(event.getId(), 0),
                     categoryDto,
                     userDto,
-                    event
+                    event,
+                    comments.getOrDefault(event.getId(), 0)
             );
             result.add(response);
         }
